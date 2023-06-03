@@ -114,6 +114,49 @@ class HashTable:
                 current = current.next
             print("\n-------------------------")
 
+    def invTable(self, nsamps):
+        """
+        Given a hash table mapping images to samples (self), reverses the table so that samples
+        map to images.
+
+        Input:
+            nsamps (int) - number of samples
+        
+        Ouput:
+            None
+        """
+        samplepop = list(np.arange(1,nsamps+1))
+        output = HashTable()
+        output.init_table(samplepop)
+        for img in self.table.keys():
+            current = self.table[img]
+            while (current != None):
+                csamp = current.key
+                output.insert(img, csamp, samplepop)
+                current = current.next
+        output.n_buckets = nsamps
+        return output
+
+    def print_hash_inv(self):
+        """
+        Given an inverted hash table, outputs sample-image pairs.
+
+        Input:
+            None
+        
+        Output:
+            None
+        """
+        print("-------------------------")
+        for key,node in self.table.items():
+            print("Sample ID: " + str(key))
+            current = node
+            print("Image IDs:", end = " ")
+            while (current != None):
+                print(str(current.key), end = " ")
+                current = current.next
+            print("\n-------------------------")
+
 #Testing Functionalities of HashTable class
 def main():
     try:
@@ -132,6 +175,8 @@ def main():
             results.insert(samp_id, i, population)
     results.print_hash()
     results.load_factor()
-
+    invresults = results.invTable(nsamples)
+    invresults.print_hash_inv()
+    invresults.load_factor()
 if __name__ == "__main__":
     main()
