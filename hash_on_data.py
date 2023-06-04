@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[23]:
-
-
 from hash_test import Node
 from hash_test import HashTable
 import pandas as pd
@@ -21,7 +15,7 @@ for s_id in range(1,numsamp+1):
     samp = np.random.choice(img_ids, ssize)
     for img in samp:
         h.insert(s_id,img,img_ids)
-h.print_hash()
+#h.print_hash()
+inv_hash = h.invTable(numsamp)
+inv_hash.print_hash_inv()
 
-
-# ##### 
