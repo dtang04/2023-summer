@@ -157,6 +157,23 @@ class HashTable:
                 current = current.next
             print("\n-------------------------")
 
+    def del_sample(self, s_id):
+        for key in self.table.keys():
+            current = self.table[key]
+            if current == None:
+                continue
+            elif current.key == s_id:
+                self.table[key] = current.next
+                self.numelements -= 1
+            else:
+                prev = None
+                while (current != None and current.key != s_id):
+                    prev = current
+                    current = current.next
+                if (current != None):
+                    prev.next = current.next
+                    self.numelements -= 1
+
 #Testing Functionalities of HashTable class
 def main():
     try:
@@ -175,6 +192,11 @@ def main():
             results.insert(samp_id, i, population)
     results.print_hash()
     results.load_factor()
+    print(results.numelements)
+    results.del_sample(5)
+    results.print_hash()
+    results.load_factor()
+    print(results.numelements)
     invresults = results.invTable(nsamples)
     invresults.print_hash_inv()
     invresults.load_factor()
