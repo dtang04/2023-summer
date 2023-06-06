@@ -248,7 +248,7 @@ def main():
     except Exception:
         print("Invalid input")
     results = HashTable()
-    inweights = input("Weights of each sample (separate by commas)\n")
+    inweights = input("Weights of each image (separate by commas)\n")
     weights = []
     if inweights != "":
         strweights = list(inweights.split(","))
@@ -274,12 +274,12 @@ def main():
             else:
                 results.insert(samp_id, i, population)
     results.load_factor()
-    results.print_hash()
+    #results.print_hash()
     results.show_stats()
-    """
-    invresults.del_sample(20)
+    invresults = results.invTable(nsamples)
+    #invresults.del_sample(20)
     invresults.print_hash_inv()
-    invresults.load_factor()
-    """
+    #invresults.load_factor()
+
 if __name__ == "__main__":
     main()
