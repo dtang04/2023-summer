@@ -46,7 +46,7 @@ class HashTable:
         for i in population:
             self.table[i] = None
         
-    def insert(self, samp_id, key, population, numcycles = 0):
+    def insert(self, samp_id, key, population, weights = None, numcycles = 0):
         """
         Given a sample ID and an image ID (which is the hash table key), inserts
         a Node containing the sample_id into the hash table.
@@ -68,7 +68,10 @@ class HashTable:
         prev = None
         while (current != None):
             if (current.key == samp_id and numcycles < 100):
-                self.insert(samp_id, np.random.choice(population), population, numcycles+1) #rehash if the image already contains the sample
+                if weights == None:
+                    self.insert(samp_id, np.random.choice(population), population, numcycles = numcycles+1) #rehash if the image already contains the sample
+                else:
+                    self.insert(samp_id, np.random.choice(population, p = weights), population, weights, numcycles+1)
                 return
             elif (current.key == samp_id and numcycles >= 100):
                 raise Exception("Too many rehashes.")
@@ -245,12 +248,31 @@ def main():
     except Exception:
         print("Invalid input")
     results = HashTable()
+    inweights = input("Weights of each sample (separate by commas)\n")
+    weights = []
+    if inweights != "":
+        strweights = list(inweights.split(","))
+        for strw in strweights:
+            try:
+                weights.append(float(strw))
+            except Exception:
+                raise ValueError("Weights cannot be converted to integers")
+        if len(weights) != len(population):
+            raise Exception("Length of weights unequal to population size.")
+        if (sum(weights) != 1):
+            raise Exception("Sum of weight probabilities unequal to 1.")
     results.init_table(population)
     for samp_id in range(1,nsamples+1):
-        choices = np.random.choice(population, samplesize)
-        print("Selected buckets: " + str(choices))
+        if weights != []:
+            choices = np.random.choice(population, samplesize, p = weights)
+        else:
+            choices = np.random.choice(population, samplesize)
+        print("Selected images of sample " + str(samp_id) + ": " + str(choices))
         for i in choices:
-            results.insert(samp_id, i, population)
+            if weights != []:
+                results.insert(samp_id, i, population, weights)
+            else:
+                results.insert(samp_id, i, population)
     results.load_factor()
     results.print_hash()
     results.show_stats()
