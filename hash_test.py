@@ -68,7 +68,7 @@ class HashTable:
         prev = None
         while (current != None):
             if (current.key == samp_id and numcycles < 100):
-                if weights == None:
+                if len(weights) == 0:
                     self.insert(samp_id, np.random.choice(population), population, numcycles = numcycles+1) #rehash if the image already contains the sample
                 else:
                     self.insert(samp_id, np.random.choice(population, p = weights), population, weights, numcycles+1)
