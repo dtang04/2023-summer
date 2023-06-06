@@ -249,7 +249,7 @@ def main():
         print("Invalid input")
     results = HashTable()
     inweights = input("Weights of each image (separate by commas)\n")
-    weights = []
+    weights = []  
     if inweights != "":
         strweights = list(inweights.split(","))
         for strw in strweights:
