@@ -173,7 +173,7 @@ class HashTable:
         and deletes all instances of that image in the HashTable.
 
         Input:
-            s_id  (int) - Either the sample id for a HashTable mapping images to samples, or
+            s_id  (int): Either the sample id for a HashTable mapping images to samples, or
             the image id for a HashTable mapping samples to images.
         
         Output:
@@ -200,10 +200,12 @@ class HashTable:
         Given a HashTable mapping images to samples or samples to images (self),
         finds the longest chain of nodes that are linked to a particular key.
 
-        Input: None
+        Input: 
+            None
 
-        Output: Tuple of size two (first element is index position, second
-        element is the number of nodes make up the longest chain)
+        Output: 
+            Tuple of size two (first element is index position, second
+            element is the number of nodes make up the longest chain)
         """
         maximum = 0
         maxind = []
@@ -236,6 +238,46 @@ class HashTable:
         info = self.find_longest_chain()
         print("Longest Chain: " + str(info[1]) + " at keys " + str(info[0]))
         print("HashTable Inverted? " + str(self.inv))
+        
+    def count_repeats(self):
+        """
+        Returns a tuple of size 2 containing information about images
+        that are sampled more than once. The first element of the tuple is
+        the number of duplicate entries. The second element of the tuple is a
+        dictionary with each image ID as keys and the number of times that
+        a duplicate sample was taken of that image.
+
+        Input:
+            None
+        
+        Output: Tuple of size two (first element is the number of duplicate entries,
+        second element is a dictionary containing frequencies of duplicates by image
+        ID.
+        """
+        inv_table = None
+        if self.inv == False:
+            inv_table = self.invTable()
+        else:
+            inv_table = self
+        agglst = []
+        for key in inv_table.table.keys():
+            current = inv_table.table[key]
+            while current != None:
+                agglst.append(current.key)
+                current = current.next
+        dupls = {}
+        unique = set(agglst)
+        for element in unique:
+            count = 0
+            for i in agglst:
+                if element == i:
+                    count += 1
+            if count != 1:
+                dupls[element] = count - 1
+        global_count = 0
+        for val in dupls.values():
+            global_count += val
+        return (global_count, dupls)
 
 #Testing Functionalities of HashTable class
 def main():
@@ -279,6 +321,7 @@ def main():
     #invresults.del_sample(20)
     invresults.print_hash_inv()
     #invresults.load_factor()
+    print(invresults.count_repeats())
 
 if __name__ == "__main__":
     main()
