@@ -347,35 +347,36 @@ class HashTable:
         except ZeroDivisionError:
             raise Exception("No duplicate entries in hash table.")
 
-    def balance_leaves(self):
+    def balance_leaves(self, num_iter):
         """
-        Performs one iteration of balancing, where nodes from a heavily-populated
+        Performs num_iter iterations of balancing, where nodes from a heavily-populated
         bucket are moved to a less heavily-populated bucket. Note that this does not
         change the load factor.
 
         Input:
-            None
+            num_iter - Number of balancing iterations
         
         Output: None
         """
-        dupls = self.count_repeats()
-        avg = self.calc_avg_dupls()
-        src_lst = []
-        dest_lst = []
-        for img_id in self.table.keys():
-            if self.calc_listlen(img_id) <= avg - 1:
-                dest_lst.append(img_id)
-        for img_id, num_dupl in dupls[1].items():
-            if self.calc_listlen(img_id) >= avg + 1:
-                src_lst.append(img_id)
-        for i,img_id in enumerate(src_lst):
-            if i > len(dest_lst) - 1:
-                return
-            else:
-                current = self.table[src_lst[i]]
-                while current.next != None:
-                    current = current.next
-                self.move_node(src_lst[i], dest_lst[i], current.key)
+        for i in range(num_iter):
+            dupls = self.count_repeats()
+            avg = self.calc_avg_dupls()
+            src_lst = []
+            dest_lst = []
+            for img_id in self.table.keys():
+                if self.calc_listlen(img_id) <= avg - 1:
+                    dest_lst.append(img_id)
+            for img_id, num_dupl in dupls[1].items():
+                if self.calc_listlen(img_id) >= avg + 1:
+                    src_lst.append(img_id)
+            for i,img_id in enumerate(src_lst):
+                if i > len(dest_lst) - 1:
+                    return
+                else:
+                    current = self.table[src_lst[i]]
+                    while current.next != None:
+                        current = current.next
+                    self.move_node(src_lst[i], dest_lst[i], current.key)
 
 #Testing Functionalities of HashTable class
 def main():
@@ -418,7 +419,7 @@ def main():
     #invresults.del_sample(20)
     #invresults.print_hash_inv()
     #invresults.load_factor()
-    results.balance_leaves()
+    results.balance_leaves(100)
     results.print_hash()
 
 if __name__ == "__main__":
