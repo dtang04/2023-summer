@@ -281,6 +281,17 @@ class HashTable:
         return (global_count, dupls)
 
     def move_node(self, src_img, dest_img, sample_id):
+        """
+        Given a source image, destination image, and a sample_id, moves the according node
+        from the source image bucket to the destination image bucket.
+
+        Input:
+            src_img - int
+            dest_img - int
+            sample_id - int
+        
+        Output: None
+        """
         current = self.table[src_img]
         rev_node = None
         if current == None:
@@ -319,6 +330,14 @@ class HashTable:
         return count
 
     def calc_avg_dupls(self):
+        """
+        Calculates the average length of duplicates in the hash table.
+
+        Input:
+            None
+        Output:
+            float
+        """
         info = self.count_repeats()
         count = 0
         for i in info[1].values():
@@ -329,6 +348,16 @@ class HashTable:
             raise Exception("No duplicate entries in hash table.")
 
     def balance_leaves(self):
+        """
+        Performs one iteration of balancing, where nodes from a heavily-populated
+        bucket are moved to a less heavily-populated bucket. Note that this does not
+        change the load factor.
+
+        Input:
+            None
+        
+        Output: None
+        """
         dupls = self.count_repeats()
         avg = self.calc_avg_dupls()
         src_lst = []
