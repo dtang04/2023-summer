@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[104]:
-
-
 from hash_test import Node
 from hash_test import HashTable
 import pandas as pd
@@ -81,10 +75,6 @@ inv_hash = h.invTable(numsamps)
 inv_hash.print_hash_inv()
 h.show_stats()
 
-
-# In[105]:
-
-
 #Calculating Load Factor Subsets - Run this after the running first cell
 cat_1 = input("Enter the first variable that will be considered in load factor calculations. ")
 cat_2 = input("Enter the second variable that will be considered in load factor calculations. ")
@@ -134,10 +124,6 @@ for cat_1 in load_dict:
         load_dict[cat_1][cat_2].append(load_dict[cat_1][cat_2][1]/load_dict[cat_1][cat_2][0])
 print(load_dict)      
 
-
-# In[106]:
-
-
 #After initializing load_dict - construct heatmaps
 cat = input("Enter weighting variable:")
 unique = None
@@ -157,10 +143,6 @@ for key in load_dict:
 print(out_dict)
 heat_df = pd.DataFrame(out_dict, index = unique)
 sns.heatmap(heat_df)
-
-
-# In[20]:
-
 
 #Verifying HashTable Results
 lst = input("Enter image IDs separated by a space: ").split(" ")
