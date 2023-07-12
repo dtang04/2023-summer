@@ -30,6 +30,7 @@ class HashTable:
         self.numelements = 0
         self.n_buckets = None
         self.inv = False
+        self.replace = False
 
     def init_table(self, population):
         """
@@ -85,6 +86,29 @@ class HashTable:
             prev.next = current
         self.numelements += 1
 
+    def insert_with_replacement(self, samp_id, key):
+        """
+        Insert a sample ID into the hash table without
+        checking if that sample has selected the same image
+        before. 
+
+        Input:
+            samp_id (int) - The ID of a specific sample
+            key (int) - The image ID
+        
+        Output:
+            None
+        """
+        if self.table[key] == None:
+            self.table[key] = Node(samp_id)
+        else:
+            current = self.table[key]
+            while (current.next != None):
+                current = current.next
+            current.next = Node(samp_id)
+        self.numelements += 1
+        self.replace = True
+
     def load_factor(self):
         """
         Computes and prints the load factor, which is the number of elements in the hash
@@ -139,7 +163,10 @@ class HashTable:
             current = self.table[img]
             while (current != None):
                 csamp = current.key
-                output.insert(img, csamp, samplepop)
+                if self.replace == False:
+                    output.insert(img, csamp, samplepop)
+                else:
+                    output.insert_with_replacement(img, csamp)
                 current = current.next
         output.n_buckets = nsamps
         output.inv = True
@@ -476,8 +503,10 @@ def main():
         for i in choices:
             if weights != []:
                 results.insert(samp_id, i, population, weights)
+                #results.insert_with_replacement(samp_id, i)
             else:
                 results.insert(samp_id, i, population)
+                #results.insert_with_replacement(samp_id, i)
     #results.load_factor()
     #results.print_hash()
     invresults = results.invTable(nsamples)
@@ -485,7 +514,7 @@ def main():
     print(invresults.img_load_stats())
     print(invresults.find_outliers())
     #invresults.del_sample(20)
-    #invresults.print_hash_inv()
+    invresults.print_hash_inv()
     #invresults.load_factor()
     #results.balance_leaves(100)
     #results.print_hash()
